@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Mospolytech cloud</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        *:focus {
+            outline: none;
+        }
+        body {
+            background-color: rgb(44, 42, 42);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 0 1em;
+            border-bottom: 1px solid rgb(60, 58, 58);
+        }
+        .logo-container {
+            max-width: 70%;
+        }
+        .logo_hypertext {
+            display: flex;
+            align-items: center;
+            margin: 1em 0 1em 1em;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo_hypertext:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-text {
+            margin: 0 0 0 1em;
+            font-size: 1em;
+            color: white;
+        }
+        .logo_polytech {
+            width: clamp(150px, 5vw, 50px);
+        }
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75em;
+            margin-left: auto;
+            color: rgb(200, 200, 200);
+            font-size: 0.9em;
+        }
+        .user-menu i {
+            font-size: 1.4em;
+            color: rgb(160, 160, 160);
+        }
+        .logout-btn {
+            background: none;
+            border: 1px solid rgb(80, 78, 78);
+            color: rgb(180, 180, 180);
+            padding: 0.35em 1em;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .logout-btn:hover {
+            border-color: rgb(140, 140, 140);
+            color: white;
+        }
+        main {
+            flex: 1 1 0;
+            padding: 2em 3em;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+        }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .page-header h1 {
+            color: white;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin: 0;
+        }
+        .create-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            padding: 0.55em 1.3em;
+            background: none;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+        .create-btn:hover {
+            border-color: rgba(255,255,255,0.45);
+            background: rgba(255,255,255,0.05);
+            text-decoration: none;
+            color: white;
+        }
+        .vm-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+        }
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1em;
+            padding: 5em 2em;
+            background-color: rgb(55, 53, 53);
+            border-radius: 16px;
+            border: 1px dashed rgb(80, 78, 78);
+            text-align: center;
+        }
+        .empty-state i {
+            font-size: 3em;
+            color: rgb(100, 98, 98);
+        }
+        .empty-state p {
+            color: rgb(140, 140, 140);
+            font-size: 0.95em;
+            margin: 0;
+        }
+        .empty-state span {
+            color: rgb(100, 98, 98);
+            font-size: 0.8em;
+        }
+        .quotas {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1em;
+        }
+        .quota-card {
+            background-color: rgb(55, 53, 53);
+            border-radius: 12px;
+            padding: 1.25em 1.5em;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75em;
+        }
+        .quota-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .quota-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            color: rgb(160, 160, 160);
+            font-size: 0.85em;
+        }
+        .quota-label i {
+            font-size: 1em;
+        }
+        .quota-values {
+            color: white;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        .quota-values span {
+            color: rgb(120, 118, 118);
+            font-weight: 400;
+            font-size: 0.85em;
+        }
+        .quota-bar {
+            height: 4px;
+            background-color: rgb(75, 73, 73);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .quota-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #1a73e8, #6a11cb);
+            transition: width 0.4s ease;
+        }
+        .vm-card {
+            display: flex;
+            align-items: center;
+            gap: 1.5em;
+            padding: 1.25em 1.5em;
+            background-color: rgb(55, 53, 53);
+            border-radius: 12px;
+            border: 1px solid rgb(68, 66, 66);
+        }
+        .vm-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .vm-status.running  { background-color: #22c55e; box-shadow: 0 0 6px #22c55e88; }
+        .vm-status.stopped  { background-color: rgb(120, 118, 118); }
+        .vm-status.building { background-color: #f59e0b; box-shadow: 0 0 6px #f59e0b88; }
+        .vm-status.error    { background-color: #ef4444; box-shadow: 0 0 6px #ef444488; }
+        .vm-info { flex: 1; display: flex; flex-direction: column; gap: 0.25em; }
+        .vm-name { color: white; font-size: 1em; font-weight: 600; margin: 0; }
+        .vm-meta { color: rgb(150, 150, 150); font-size: 0.8em; display: flex; gap: 1.25em; }
+        .vm-meta span { display: flex; align-items: center; gap: 0.3em; }
+        .settings-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
+            padding: 0.4em 1em;
+            background: none;
+            border: 1px solid rgb(80, 78, 78);
+            color: rgb(180, 180, 180);
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: border-color 0.2s ease, color 0.2s ease;
+            white-space: nowrap;
+        }
+        .settings-btn:hover { border-color: rgb(140, 140, 140); color: white; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <a href="{{ url_for('index') }}" class="logo_hypertext">
+                <img src="https://mospolytech.ru/local/templates/main/dist/img/logos/mospolytech-logo-white.svg" alt="logo" class="logo_polytech">
+                <p class="logo-text">Облачная инфраструктура</p>
+            </a>
+        </div>
+        <div class="user-menu">
+            <i class="bi bi-person-circle"></i>
+            <span>{{ current_user.username }}</span>
+            <form action="{{ url_for('logout') }}" method="POST" style="margin:0">
+                <button type="submit" class="logout-btn">Выйти</button>
+            </form>
+        </div>
+    </header>
+    <main>
+        <div class="page-header">
+            <h1>Мои виртуальные машины</h1>
+            <a href="{{ url_for('create_vm') }}" class="create-btn">
+                <i class="bi bi-plus-lg"></i>
+                Создать виртуальную машину
+            </a>
+        </div>
+        <div class="quotas">
+            <div class="quota-card">
+                <div class="quota-label">
+                    <i class="bi bi-server"></i>
+                    Виртуальные машины
+                </div>
+                <div class="quota-values">{{ quotas.vms_used }} <span>/ {{ quotas.vms_max }}</span></div>
+                <div class="quota-bar"><div class="quota-bar-fill" style="width: {{ (quotas.vms_used / quotas.vms_max * 100)|int }}%"></div></div>
+            </div>
+            <div class="quota-card">
+                <div class="quota-label">
+                    <i class="bi bi-cpu"></i>
+                    vCPU
+                </div>
+                <div class="quota-values">{{ quotas.vcpu_used }} <span>/ {{ quotas.vcpu_max }}</span></div>
+                <div class="quota-bar"><div class="quota-bar-fill" style="width: {{ (quotas.vcpu_used / quotas.vcpu_max * 100)|int }}%"></div></div>
+            </div>
+            <div class="quota-card">
+                <div class="quota-label">
+                    <i class="bi bi-memory"></i>
+                    RAM (GB)
+                </div>
+                <div class="quota-values">{{ quotas.ram_used }} <span>/ {{ quotas.ram_max }}</span></div>
+                <div class="quota-bar"><div class="quota-bar-fill" style="width: {{ (quotas.ram_used / quotas.ram_max * 100)|int }}%"></div></div>
+            </div>
+            <div class="quota-card">
+                <div class="quota-label">
+                    <i class="bi bi-device-hdd"></i>
+                    SSD (GB)
+                </div>
+                <div class="quota-values">{{ quotas.ssd_used }} <span>/ {{ quotas.ssd_max }}</span></div>
+                <div class="quota-bar"><div class="quota-bar-fill" style="width: {{ (quotas.ssd_used / quotas.ssd_max * 100)|int }}%"></div></div>
+            </div>
+        </div>
+        <div class="vm-list" id="vm-list">
+            {% for vm in vms %}
+            <div class="vm-card" data-vm-id="{{ vm.id }}">
+                <div class="vm-status stopped" id="vm-status-{{ vm.id }}"></div>
+                <div class="vm-info">
+                    <p class="vm-name">{{ vm.name }}</p>
+                    <div class="vm-meta">
+                        <span><i class="bi bi-hdd-stack"></i> {{ vm.os }}</span>
+                        <span><i class="bi bi-cpu"></i> {{ vm.vcpu }} ядра</span>
+                        <span><i class="bi bi-memory"></i> {{ vm.ram }} GB RAM</span>
+                        <span><i class="bi bi-device-hdd"></i> {{ vm.ssd }} GB SSD</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('vm_settings', vm_id=vm.id) }}" class="settings-btn">
+                    <i class="bi bi-gear"></i> Настройки
+                </a>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="bi bi-server"></i>
+                <p>У вас пока нет виртуальных машин</p>
+                <span>Нажмите «Создать виртуальную машину», чтобы начать</span>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='scripts/account.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
