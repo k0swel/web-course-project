@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Панель администратора — Mospolytech cloud</title>
+    <style>
+        * { box-sizing: border-box; }
+        *:focus { outline: none; }
+
+        body {
+            background-color: rgb(44, 42, 42);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* ── Хедер ── */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 0 1em;
+            border-bottom: 1px solid rgb(60, 58, 58);
+        }
+        .logo-container { max-width: 70%; }
+        .logo_hypertext {
+            display: flex;
+            align-items: center;
+            margin: 1em 0 1em 1em;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo_hypertext:hover { text-decoration: none; color: inherit; }
+        .logo-text { margin: 0 0 0 1em; font-size: 1em; color: white; }
+        .logo_polytech { width: clamp(30px, 5vw, 50px); }
+
+        .admin-badge {
+            margin-left: 1em;
+            background: linear-gradient(135deg, #ef4444, #991b1b);
+            color: white;
+            font-size: 0.7em;
+            padding: 0.2em 0.65em;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            flex-shrink: 0;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75em;
+            margin-left: auto;
+            color: rgb(200, 200, 200);
+            font-size: 0.9em;
+        }
+        .user-menu i { font-size: 1.4em; color: rgb(160, 160, 160); }
+        .logout-btn {
+            background: none;
+            border: 1px solid rgb(80, 78, 78);
+            color: rgb(180, 180, 180);
+            padding: 0.35em 1em;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .logout-btn:hover { border-color: rgb(140, 140, 140); color: white; }
+
+        /* ── Main ── */
+        main {
+            flex: 1 1 0;
+            padding: 2em 3em;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+        }
+        .page-header h1 {
+            color: white;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* ── Stat cards ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1em;
+        }
+        .stat-card {
+            background-color: rgb(55, 53, 53);
+            border-radius: 12px;
+            padding: 1.25em 1.5em;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+        }
+        .stat-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
+            color: rgb(160, 160, 160);
+            font-size: 0.8em;
+        }
+        .stat-value { color: white; font-size: 1.75em; font-weight: 700; line-height: 1; }
+
+        /* ── Search row ── */
+        .search-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1em;
+        }
+        .search-wrapper {
+            position: relative;
+            max-width: 340px;
+            flex: 1;
+        }
+        .search-wrapper i {
+            position: absolute;
+            left: 0.75em;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgb(120, 118, 118);
+            font-size: 0.95em;
+            pointer-events: none;
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.6em 0.85em 0.6em 2.4em;
+            background-color: rgb(55, 53, 53);
+            border: 1px solid rgb(80, 78, 78);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9em;
+            transition: border-color 0.2s ease;
+        }
+        .search-input:focus { border-color: #1a73e8; }
+        .search-input::placeholder { color: rgb(100, 98, 98); }
+        .users-count { color: rgb(140, 140, 140); font-size: 0.875em; white-space: nowrap; }
+
+        /* ── User list ── */
+        .user-list { display: flex; flex-direction: column; gap: 0.75em; }
+
+        .user-row {
+            display: flex;
+            align-items: center;
+            gap: 1.25em;
+            padding: 1em 1.5em;
+            background-color: rgb(55, 53, 53);
+            border-radius: 12px;
+            border: 1px solid rgb(68, 66, 66);
+            transition: border-color 0.2s ease;
+        }
+        .user-row:hover { border-color: rgb(95, 93, 93); }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a73e8, #6a11cb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.05em;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .user-info { flex: 1; display: flex; flex-direction: column; gap: 0.15em; }
+        .user-name { color: white; font-size: 0.95em; font-weight: 600; margin: 0; }
+        .user-email { color: rgb(140, 140, 140); font-size: 0.8em; }
+
+        .user-stats { display: flex; gap: 2em; }
+        .user-stat { display: flex; flex-direction: column; align-items: center; gap: 0.1em; }
+        .user-stat-value { color: white; font-size: 0.9em; font-weight: 600; }
+        .user-stat-label { color: rgb(120, 118, 118); font-size: 0.7em; }
+
+        .status-badge {
+            font-size: 0.75em;
+            padding: 0.2em 0.75em;
+            border-radius: 999px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .status-badge.active { background-color: rgba(34,197,94,0.15); color: #22c55e; }
+        .status-badge.inactive { background-color: rgba(120,118,118,0.15); color: rgb(160,158,158); }
+
+        .view-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
+            padding: 0.4em 1em;
+            background: none;
+            border: 1px solid rgb(80, 78, 78);
+            color: rgb(180, 180, 180);
+            border-radius: 8px;
+            font-size: 0.85em;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .view-btn:hover { border-color: rgb(140, 140, 140); color: white; text-decoration: none; }
+
+        /* ── Empty state ── */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1em;
+            padding: 5em 2em;
+            background-color: rgb(55, 53, 53);
+            border-radius: 16px;
+            border: 1px dashed rgb(80, 78, 78);
+            text-align: center;
+        }
+        .empty-state i { font-size: 3em; color: rgb(100, 98, 98); }
+        .empty-state p { color: rgb(140, 140, 140); font-size: 0.95em; margin: 0; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <a href="{{ url_for('index') }}" class="logo_hypertext">
+                <img src="https://mospolytech.ru/local/templates/main/dist/img/logos/mospolytech-logo-white.svg" alt="logo" class="logo_polytech">
+                <p class="logo-text">Облачная инфраструктура</p>
+            </a>
+        </div>
+        <span class="admin-badge">ADMIN</span>
+        <div class="user-menu">
+            <i class="bi bi-person-circle"></i>
+            <span>{{ current_user.username }}</span>
+            <form action="{{ url_for('logout') }}" method="POST" style="margin:0">
+                <button type="submit" class="logout-btn">Выйти</button>
+            </form>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header">
+            <h1>Панель администратора</h1>
+        </div>
+
+        <!-- Сводная статистика -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label"><i class="bi bi-people"></i> Пользователи</span>
+                <span class="stat-value">{{ stats.total_users }}</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label"><i class="bi bi-server"></i> Виртуальные машины</span>
+                <span class="stat-value">{{ stats.total_vms }}</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label"><i class="bi bi-cpu"></i> vCPU (всего)</span>
+                <span class="stat-value">{{ stats.total_vcpu }}</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label"><i class="bi bi-memory"></i> RAM (GB)</span>
+                <span class="stat-value">{{ stats.total_ram }}</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label"><i class="bi bi-device-hdd"></i> SSD (GB)</span>
+                <span class="stat-value">{{ stats.total_ssd }}</span>
+            </div>
+        </div>
+
+        <!-- Поиск -->
+        <div class="search-row">
+            <div class="search-wrapper">
+                <i class="bi bi-search"></i>
+                <input type="text" id="search" class="search-input" placeholder="Поиск по имени или email...">
+            </div>
+            <span class="users-count" id="users-count">{{ users|length }} пользователей</span>
+        </div>
+
+        <!-- Список пользователей -->
+        <div class="user-list" id="user-list">
+            {% for user in users %}
+            <div class="user-row" data-search="{{ user.username|lower }} {{ user.email|lower }}">
+                <div class="user-avatar">{{ user.username[0]|upper }}</div>
+                <div class="user-info">
+                    <p class="user-name">{{ user.username }}</p>
+                    <span class="user-email">{{ user.email }}</span>
+                </div>
+                <div class="user-stats">
+                    <div class="user-stat">
+                        <span class="user-stat-value">{{ user.vm_count }}</span>
+                        <span class="user-stat-label">ВМ</span>
+                    </div>
+                    <div class="user-stat">
+                        <span class="user-stat-value">{{ user.vcpu_used }}</span>
+                        <span class="user-stat-label">vCPU</span>
+                    </div>
+                    <div class="user-stat">
+                        <span class="user-stat-value">{{ user.ram_used }}</span>
+                        <span class="user-stat-label">GB RAM</span>
+                    </div>
+                    <div class="user-stat">
+                        <span class="user-stat-value">{{ user.ssd_used }}</span>
+                        <span class="user-stat-label">GB SSD</span>
+                    </div>
+                </div>
+                <span class="status-badge {{ 'active' if user.is_active else 'inactive' }}">
+                    {{ 'Активен' if user.is_active else 'Неактивен' }}
+                </span>
+                <a href="{{ url_for('admin_user', user_id=user.id) }}" class="view-btn">
+                    <i class="bi bi-box-arrow-up-right"></i>
+                    Аккаунт
+                </a>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="bi bi-people"></i>
+                <p>Пользователей пока нет</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='scripts/admin.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
