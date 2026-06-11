@@ -231,6 +231,39 @@
             white-space: nowrap;
         }
         .settings-btn:hover { border-color: rgb(140, 140, 140); color: white; text-decoration: none; }
+        .export-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            padding: 0.55em 1.3em;
+            background: none;
+            border: 1px solid rgb(80, 78, 78);
+            color: rgb(180, 180, 180);
+            border-radius: 8px;
+            font-size: 0.95em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .export-btn:hover { border-color: rgb(140, 140, 140); color: white; text-decoration: none; }
+        .import-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            padding: 0.55em 1.3em;
+            background: none;
+            border: 1px solid rgb(80, 78, 78);
+            color: rgb(180, 180, 180);
+            border-radius: 8px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .import-btn:hover { border-color: rgb(140, 140, 140); color: white; }
+        .header-actions { display: flex; align-items: center; gap: 0.75em; }
+        .alert { padding: 0.6em 1em; border-radius: 8px; font-size: 0.9em; border: 1px solid; }
+        .alert-error   { background: rgba(220,53,69,0.15);  border-color: #dc3545; color: #f17b84; }
+        .alert-success { background: rgba(25,135,84,0.15);  border-color: #198754; color: #75c99d; }
     </style>
 </head>
 <body>
@@ -250,12 +283,42 @@
         </div>
     </header>
     <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div style="display:flex; flex-direction:column; gap:0.5em;">
+              {% for category, message in messages %}
+                <div class="alert {{ 'alert-error' if category == 'error' else 'alert-success' }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
         <div class="page-header">
             <h1>Мои виртуальные машины</h1>
-            <a href="{{ url_for('create_vm') }}" class="create-btn">
-                <i class="bi bi-plus-lg"></i>
-                Создать виртуальную машину
-            </a>
+            <div class="header-actions">
+                {% if vms %}
+                <a href="{{ url_for('export_vms') }}" class="export-btn">
+                    <i class="bi bi-download"></i>
+                    Экспорт JSON
+                </a>
+                {% endif %}
+                <form action="{{ url_for('import_vms') }}" method="POST"
+                      enctype="multipart/form-data" style="margin:0">
+                    <input type="file" name="file" id="import-file" accept=".json"
+                           style="display:none" onchange="this.form.submit()">
+                    <button type="button" class="import-btn"
+                            onclick="document.getElementById('import-file').click()">
+                        <i class="bi bi-upload"></i>
+                        Импорт JSON
+                    </button>
+                </form>
+                <a href="{{ url_for('create_vm') }}" class="create-btn">
+                    <i class="bi bi-plus-lg"></i>
+                    Создать виртуальную машину
+                </a>
+            </div>
         </div>
         <div class="quotas">
             <div class="quota-card">

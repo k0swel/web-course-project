@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Mospolyteсh cloud</title>
+    <style>
+        body {
+            background-color: rgb(44, 42, 42);
+        }
+        .logo-container {
+            max-width: 70%;
+        }
+        .logo_hypertext {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 1em 0 0 2em;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo_hypertext:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-text {
+            margin: 0 0 0 1em;
+            font-size: 1em;
+            color: white;
+        }
+        .logo_polytech {
+            width: clamp(30px, 12cqi, 150px);
+        }
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 1em;
+            margin-left: auto;
+            margin-right: 1em;
+        }
+        .buttons button {
+            background: none;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.5em 1.4em;
+            border-radius: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+        .buttons button:hover {
+            border-color: rgba(255,255,255,0.45);
+            background: rgba(255,255,255,0.05);
+        }
+        .buttons button:active {
+            background: rgba(255,255,255,0.08);
+        }
+        .header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        .os-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2em;
+        }
+        .cards {
+            display: flex;
+            flex-direction: row;
+            gap: 2em;
+        }
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+            width: 180px;
+            padding: 2em 1.5em;
+            background-color: rgb(60, 58, 58);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+            user-select: none;
+        }
+        .card:focus {
+            outline: none;
+        }
+        .card:hover {
+            background-color: rgb(72, 70, 70);
+            transform: translateY(-4px);
+        }
+        .card.selected {
+            background-color: rgb(72, 70, 70);
+        }
+        .card img {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+        }
+        .card-name {
+            color: white;
+            font-size: 1.1em;
+            margin: 0;
+        }
+        .amd-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75em;
+            padding: 0.6em 1.4em;
+            background-color: rgb(60, 58, 58);
+            border-radius: 999px;
+            border-left: 3px solid #ED1C24;
+        }
+        .amd-badge img {
+            height: 20px;
+        }
+        .amd-badge span {
+            color: rgb(200, 200, 200);
+            font-size: 0.9em;
+        }
+        main h2 {
+            color: white;
+            font-size: 1.5em;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            margin: 0;
+        }
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5em;
+            padding: 3em 1em 1em;
+            text-align: center;
+        }
+        .hero h1 {
+            color: white;
+            font-size: 2.4em;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, #1a73e8, #6a11cb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            color: rgb(180, 180, 180);
+            font-size: 1em;
+            max-width: 480px;
+            margin: 0.5em 0 0;
+        }
+        .stats {
+            display: flex;
+            gap: 3em;
+            padding: 2em 0;
+        }
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2em;
+        }
+        .stat-value {
+            color: white;
+            font-size: 2em;
+            font-weight: 700;
+        }
+        .stat-label {
+            color: rgb(150, 150, 150);
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .stat-divider {
+            width: 1px;
+            background-color: rgb(80, 78, 78);
+            align-self: stretch;
+        }
+        .features {
+            display: flex;
+            gap: 1.5em;
+            padding: 2em 0 3em;
+        }
+        .feature-card {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75em;
+            width: 220px;
+            padding: 1.5em;
+            background-color: rgb(55, 53, 53);
+            border-radius: 12px;
+            border-top: 2px solid rgb(80, 78, 78);
+        }
+        .feature-icon {
+            font-size: 2em;
+            color: #1a73e8;
+        }
+        .feature-card h3 {
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            margin: 0;
+        }
+        .feature-card p {
+            color: rgb(160, 160, 160);
+            font-size: 0.85em;
+            margin: 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body style="display: flex; flex-direction: column;">
+    <header class="header">
+        <div class="logo-container">
+            <a href="https://mospolytech.ru/" class="logo_hypertext" target="_blank">
+                <img src="https://mospolytech.ru/local/templates/main/dist/img/logos/mospolytech-logo-white.svg" alt="logo" class="logo_polytech">
+                <p class="logo-text" id="logo-text">Облачная инфраструктура</p>
+            </a>
+        </div>
+        <div class="buttons">
+            <a href="{{ url_for('register') }}"><button>Регистрация</button></a>
+            <a href="{{ url_for('login') }}"><button>Вход</button></a>
+        </div>
+    </header>
+    <main style="display: flex; align-items: center; justify-content: center; flex: 1 1 0; flex-direction: column;">
+        <div class="hero">
+            <h1>Облачная инфраструктура<br><span>для вашего проекта</span></h1>
+            <p>Разворачивайте виртуальные машины за секунды на базе мощных серверов Московского Политеха</p>
+        </div>
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-value">99.9%</span>
+                <span class="stat-label">Uptime</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-value">100+</span>
+                <span class="stat-label">Серверов</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-value">5000+</span>
+                <span class="stat-label">Пользователей</span>
+            </div>
+        </div>
+        <div class="os-section">
+            <h2>Набор готовых образов облачных операционных систем</h2>
+            <div class="cards">
+                <div class="card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" alt="Ubuntu">
+                    <p class="card-name">Ubuntu</p>
+                </div>
+                <div class="card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7xTYjhxgQPJbKXfNzL-ymdJn1rQ2GZ2QiBQ&s" alt="Arch Linux">
+                    <p class="card-name">Arch Linux</p>
+                </div>
+                <div class="card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/63/CentOS_color_logo.svg" alt="CentOS">
+                    <p class="card-name">CentOS</p>
+                </div>
+            </div>
+            <div class="amd-badge">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/AMD_Logo.svg" alt="AMD">
+                <span>Мощные серверы на базе процессоров AMD</span>
+            </div>
+        </div>
+        <div class="features">
+            <div class="feature-card">
+                <i class="bi bi-shield-check feature-icon"></i>
+                <h3>Надёжность</h3>
+                <p>Резервирование данных и автоматическое восстановление при сбоях</p>
+            </div>
+            <div class="feature-card">
+                <i class="bi bi-lightning-charge feature-icon"></i>
+                <h3>Производительность</h3>
+                <p>Процессоры AMD последнего поколения и NVMe-хранилища</p>
+            </div>
+            <div class="feature-card">
+                <i class="bi bi-lock feature-icon"></i>
+                <h3>Безопасность</h3>
+                <p>Изолированные окружения и шифрование данных в покое и при передаче</p>
+            </div>
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='scripts/running-text.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>

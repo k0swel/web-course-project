@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Создать ВМ — Mospolytech cloud</title>
+    <style>
+        * { box-sizing: border-box; }
+        *:focus { outline: none; }
+
+        body {
+            background-color: rgb(44, 42, 42);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* ── Хедер ── */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 0 1.5em;
+            border-bottom: 1px solid rgb(60, 58, 58);
+        }
+        .logo_hypertext {
+            display: flex;
+            align-items: center;
+            gap: 0.75em;
+            margin: 1em 0;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo_hypertext:hover { text-decoration: none; color: inherit; }
+        .logo_polytech { width: clamp(30px, 5vw, 50px); }
+        .logo-text { color: white; font-size: 1em; margin: 0; }
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
+            margin-left: auto;
+            background: none;
+            border: 1px solid rgb(80, 78, 78);
+            color: rgb(180, 180, 180);
+            padding: 0.35em 1em;
+            border-radius: 8px;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease;
+            text-decoration: none;
+        }
+        .back-btn:hover { border-color: rgb(140, 140, 140); color: white; text-decoration: none; }
+
+        /* ── Основной макет ── */
+        main {
+            flex: 1 1 0;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 1.5em;
+            padding: 2em 2em;
+            align-items: start;
+        }
+
+        /* ── Левая колонка ── */
+        .form-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+        }
+
+        /* ── Секция ── */
+        .section {
+            background-color: rgb(55, 53, 53);
+            border-radius: 14px;
+            padding: 1.5em;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25em;
+        }
+        .section-title {
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+        }
+        .section-title i { color: #1a73e8; }
+
+        /* ── Карточки ОС ── */
+        .os-cards {
+            display: flex;
+            gap: 1em;
+        }
+        .os-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75em;
+            flex: 1;
+            padding: 1.25em 1em;
+            background-color: rgb(44, 42, 42);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+            user-select: none;
+        }
+        .os-card:focus { outline: none; }
+        .os-card:hover {
+            background-color: rgb(50, 48, 48);
+            transform: translateY(-2px);
+        }
+        .os-card.selected {
+            border-color: #1a73e8;
+            background-color: rgb(50, 48, 48);
+        }
+        .os-card img { width: 52px; height: 52px; object-fit: contain; }
+        .os-card-name { color: white; font-size: 0.9em; margin: 0; }
+
+        /* ── Слайдеры ── */
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25em;
+        }
+        .slider-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+        }
+        .slider-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .slider-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
+            color: rgb(180, 180, 180);
+            font-size: 0.875em;
+        }
+        .slider-label i { color: rgb(120, 118, 118); }
+        .slider-value {
+            color: white;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        .slider-value span {
+            color: rgb(120, 118, 118);
+            font-weight: 400;
+            font-size: 0.8em;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            background: rgb(75, 73, 73);
+            border-radius: 999px;
+            outline: none;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a73e8, #6a11cb);
+            cursor: pointer;
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+            filter: brightness(1.15);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a73e8, #6a11cb);
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-track {
+            height: 6px;
+            background: rgb(75, 73, 73);
+            border-radius: 999px;
+        }
+
+        /* ── Правая колонка: сводка ── */
+        .summary {
+            position: sticky;
+            top: 1.5em;
+            background-color: rgb(55, 53, 53);
+            border-radius: 14px;
+            padding: 1.5em;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25em;
+        }
+        .summary-title {
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            margin: 0;
+        }
+        .summary-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6em;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875em;
+        }
+        .summary-row-label {
+            color: rgb(160, 160, 160);
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
+        }
+        .summary-row-value {
+            color: white;
+            font-weight: 500;
+        }
+        .summary-divider {
+            height: 1px;
+            background-color: rgb(70, 68, 68);
+        }
+        .vm-name-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4em;
+        }
+        .vm-name-group label {
+            color: rgb(180, 180, 180);
+            font-size: 0.8em;
+        }
+        .vm-name-group input {
+            width: 100%;
+            padding: 0.55em 0.85em;
+            background-color: rgb(44, 42, 42);
+            border: 1px solid rgb(80, 78, 78);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.875em;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .vm-name-group input:focus { border-color: #1a73e8; }
+        .vm-name-group input::placeholder { color: rgb(100, 98, 98); }
+        .vm-name-group .input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .vm-name-group .input-wrap input {
+            padding-right: 2.4em;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 0.65em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgb(140, 140, 140);
+            font-size: 0.95em;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            transition: color 0.15s ease;
+        }
+        .toggle-password:hover { color: white; }
+        .field-error {
+            color: #ff6b6b;
+            font-size: 0.75em;
+            display: none;
+            margin-top: -0.15em;
+        }
+        .create-btn {
+            width: 100%;
+            padding: 0.7em;
+            background: none;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+        .create-btn:hover { border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.05); }
+        .create-btn:active { background: rgba(255,255,255,0.08); }
+        .create-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+            filter: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="{{ url_for('index') }}" class="logo_hypertext">
+            <img src="https://mospolytech.ru/local/templates/main/dist/img/logos/mospolytech-logo-white.svg" alt="logo" class="logo_polytech">
+            <p class="logo-text">Облачная инфраструктура</p>
+        </a>
+        <a href="{{ url_for('account') }}" class="back-btn">
+            <i class="bi bi-arrow-left"></i>
+            Назад
+        </a>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div style="padding: 0.75em 1.5em 0;">
+          {% for category, message in messages %}
+            <div style="background: {% if category == 'error' %}rgba(220,53,69,0.15){% else %}rgba(25,135,84,0.15){% endif %}; border: 1px solid {% if category == 'error' %}#dc3545{% else %}#198754{% endif %}; color: {% if category == 'error' %}#f17b84{% else %}#75c99d{% endif %}; padding: 0.6em 1em; border-radius: 8px; margin-bottom: 0.5em; font-size: 0.9em;">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <main>
+        <!-- Левая колонка -->
+        <div class="form-column">
+
+            <!-- Операционная система -->
+            <div class="section">
+                <p class="section-title"><i class="bi bi-hdd-stack"></i> Операционная система</p>
+                <div class="os-cards">
+                    <div class="os-card selected" onclick="selectOS(this, 'Ubuntu')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo-ubuntu_cof-orange-hex.svg" alt="Ubuntu">
+                        <p class="os-card-name">Ubuntu</p>
+                    </div>
+                    <div class="os-card" onclick="selectOS(this, 'Arch Linux')">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7xTYjhxgQPJbKXfNzL-ymdJn1rQ2GZ2QiBQ&s" alt="Arch Linux">
+                        <p class="os-card-name">Arch Linux</p>
+                    </div>
+                    <div class="os-card" onclick="selectOS(this, 'CentOS')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/63/CentOS_color_logo.svg" alt="CentOS">
+                        <p class="os-card-name">CentOS</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Конфигурация -->
+            <div class="section">
+                <p class="section-title"><i class="bi bi-sliders"></i> Конфигурация</p>
+                <div class="slider-group">
+
+                    <div class="slider-row">
+                        <div class="slider-meta">
+                            <span class="slider-label"><i class="bi bi-cpu"></i> vCPU</span>
+                            <span class="slider-value" id="vcpu-display">1 <span>ядро</span></span>
+                        </div>
+                        <input type="range" id="vcpu" min="1" max="16" value="1" step="1">
+                    </div>
+
+                    <div class="slider-row">
+                        <div class="slider-meta">
+                            <span class="slider-label"><i class="bi bi-memory"></i> RAM</span>
+                            <span class="slider-value" id="ram-display">1 <span>GB</span></span>
+                        </div>
+                        <input type="range" id="ram" min="1" max="64" value="1" step="1">
+                    </div>
+
+                    <div class="slider-row">
+                        <div class="slider-meta">
+                            <span class="slider-label"><i class="bi bi-device-hdd"></i> SSD</span>
+                            <span class="slider-value" id="ssd-display">10 <span>GB</span></span>
+                        </div>
+                        <input type="range" id="ssd" min="10" max="1000" value="10" step="10">
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Правая колонка: сводка -->
+        <div class="summary">
+            <form action="{{ url_for('create_vm') }}" method="POST" style="display: contents" onsubmit="return validateVM(event)">
+                <input type="hidden" id="os-input" name="os" value="Ubuntu">
+                <input type="hidden" id="vcpu-input" name="vcpu" value="1">
+                <input type="hidden" id="ram-input" name="ram" value="1">
+                <input type="hidden" id="ssd-input" name="ssd" value="10">
+
+                <p class="summary-title">Сводка</p>
+
+                <div class="vm-name-group">
+                    <label for="vm-name">Название машины</label>
+                    <input type="text" id="vm-name" name="vm_name" placeholder="my-server-01" maxlength="40">
+                    <span class="field-error" id="name-error"></span>
+                </div>
+
+                <div class="vm-name-group">
+                    <label for="vm-password">Пароль виртуальной машины</label>
+                    <div class="input-wrap">
+                        <input type="password" id="vm-password" name="vm_password" placeholder="Минимум 8 символов">
+                        <button type="button" class="toggle-password" onclick="toggleVMPassword('vm-password', this)">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <span class="field-error" id="password-error"></span>
+                </div>
+
+                <div class="vm-name-group">
+                    <label for="vm-password-confirm">Подтвердите пароль</label>
+                    <div class="input-wrap">
+                        <input type="password" id="vm-password-confirm" name="vm_password_confirm" placeholder="Повторите пароль">
+                        <button type="button" class="toggle-password" onclick="toggleVMPassword('vm-password-confirm', this)">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <span class="field-error" id="confirm-error"></span>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-rows">
+                    <div class="summary-row">
+                        <span class="summary-row-label"><i class="bi bi-hdd-stack"></i> ОС</span>
+                        <span class="summary-row-value" id="summary-os">Ubuntu</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-row-label"><i class="bi bi-cpu"></i> vCPU</span>
+                        <span class="summary-row-value" id="summary-vcpu">1 ядро</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-row-label"><i class="bi bi-memory"></i> RAM</span>
+                        <span class="summary-row-value" id="summary-ram">1 GB</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-row-label"><i class="bi bi-device-hdd"></i> SSD</span>
+                        <span class="summary-row-value" id="summary-ssd">10 GB</span>
+                    </div>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <button type="submit" class="create-btn" id="create-btn">
+                    Создать виртуальную машину
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='scripts/create_vm.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>

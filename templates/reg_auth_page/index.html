@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Регистрация — Mospolytech cloud</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        *:focus {
+            outline: none;
+        }
+        body {
+            background-color: rgb(44, 42, 42);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        .logo-container {
+            max-width: 70%;
+        }
+        .logo_hypertext {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 1em 0 0 2em;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo_hypertext:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-text {
+            margin: 0 0 0 1em;
+            font-size: 1em;
+            color: white;
+        }
+        .logo_polytech {
+            width: 20%;
+        }
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1 1 0;
+            padding: 2em 1em;
+        }
+        .form-card {
+            background-color: rgb(55, 53, 53);
+            border-radius: 16px;
+            padding: 2.5em 2em;
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+        }
+        .form-card h2 {
+            color: white;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin: 0;
+            text-align: center;
+        }
+        .form-card p.subtitle {
+            color: rgb(160, 160, 160);
+            font-size: 0.875em;
+            text-align: center;
+            margin: -0.5em 0 0;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4em;
+        }
+        .form-group label {
+            color: rgb(190, 190, 190);
+            font-size: 0.85em;
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper i.input-icon {
+            position: absolute;
+            left: 0.85em;
+            color: rgb(140, 140, 140);
+            font-size: 1em;
+            pointer-events: none;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.65em 0.85em 0.65em 2.5em;
+            background-color: rgb(44, 42, 42);
+            border: 1px solid rgb(80, 78, 78);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95em;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 0.75em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgb(140, 140, 140);
+            font-size: 1em;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            transition: color 0.15s ease;
+        }
+        .toggle-password:hover {
+            color: white;
+        }
+        .form-group input.has-toggle {
+            padding-right: 2.5em;
+        }
+        .form-group input:focus {
+            border-color: #1a73e8;
+        }
+        .form-group input::placeholder {
+            color: rgb(110, 110, 110);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 0.7em;
+            background: linear-gradient(135deg, #1a73e8, #6a11cb);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: filter 0.2s ease, transform 0.15s ease;
+            margin-top: 0.25em;
+        }
+        .submit-btn:hover {
+            filter: brightness(1.15);
+            transform: translateY(-1px);
+        }
+        .submit-btn:active {
+            filter: brightness(0.95);
+            transform: translateY(0);
+        }
+        .divider {
+            height: 1px;
+            background-color: rgb(70, 68, 68);
+        }
+        .login-link {
+            text-align: center;
+            color: rgb(160, 160, 160);
+            font-size: 0.875em;
+        }
+        .login-link a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 0.8em;
+            display: none;
+        }
+        .flash-msg {
+            padding: 0.65em 1em;
+            border-radius: 8px;
+            font-size: 0.875em;
+        }
+        .flash-error { background-color: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+        .flash-success { background-color: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <a href="{{ url_for('index') }}" class="logo_hypertext">
+                <img src="https://mospolytech.ru/local/templates/main/dist/img/logos/mospolytech-logo-white.svg" alt="logo" class="logo_polytech">
+                <p class="logo-text">Облачная инфраструктура</p>
+            </a>
+        </div>
+    </header>
+    <main>
+        <div class="form-card">
+            <h2>Создать аккаунт</h2>
+            <p class="subtitle">Заполните данные для регистрации</p>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="flash-msg flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+            <form action="{{ url_for('register') }}" method="POST" onsubmit="return handleRegister(event)">
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-person input-icon"></i>
+                        <input type="text" id="username" name="username" placeholder="Введите ваше имя пользователя" autocomplete="username">
+                    </div>
+                    <span class="error-msg" id="username-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-envelope input-icon"></i>
+                        <input type="email" id="email" name="email" placeholder="Введите вашу почту" autocomplete="email">
+                    </div>
+                    <span class="error-msg" id="email-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-lock input-icon"></i>
+                        <input type="password" id="password" name="password" class="has-toggle" placeholder="Минимум 8 символов" autocomplete="new-password">
+                        <button type="button" class="toggle-password" onclick="togglePassword('password', this)">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <span class="error-msg" id="password-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Подтвердите пароль</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-lock-fill input-icon"></i>
+                        <input type="password" id="confirm-password" name="confirm_password" class="has-toggle" placeholder="Повторите пароль" autocomplete="new-password">
+                        <button type="button" class="toggle-password"  onclick="togglePassword('confirm-password', this)">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <span class="error-msg" id="confirm-error"></span>
+                </div>
+
+                <button type="submit" class="submit-btn">Зарегистрироваться</button>
+
+                <div class="divider" style="margin-top: 0.5em;"></div>
+
+                <p class="login-link">Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a></p>
+            </form>
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='scripts/register.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
